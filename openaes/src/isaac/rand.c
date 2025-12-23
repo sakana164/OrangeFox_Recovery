@@ -25,20 +25,20 @@ MODIFIED:
   *(r++) = b = ind(mm,y>>RANDSIZL) + x; \
 }
 
-void     isaac(ctx)
-randctx *ctx;
+/* ANSI-C style definition (was K&R style before) */
+void isaac(randctx *ctx)
 {
    register ub4 a,b,x,y,*m,*mm,*m2,*r,*mend;
-   mm=ctx->randmem; r=ctx->randrsl;
+   mm = ctx->randmem; r = ctx->randrsl;
    a = ctx->randa; b = ctx->randb + (++ctx->randc);
-   for (m = mm, mend = m2 = m+(RANDSIZ/2); m<mend; )
+   for (m = mm, mend = m2 = m + (RANDSIZ/2); m < mend; )
    {
       rngstep( a<<13, a, b, mm, m, m2, r, x);
       rngstep( a>>6 , a, b, mm, m, m2, r, x);
       rngstep( a<<2 , a, b, mm, m, m2, r, x);
       rngstep( a>>16, a, b, mm, m, m2, r, x);
    }
-   for (m2 = mm; m2<mend; )
+   for (m2 = mm; m2 < mend; )
    {
       rngstep( a<<13, a, b, mm, m, m2, r, x);
       rngstep( a>>6 , a, b, mm, m, m2, r, x);
@@ -62,57 +62,56 @@ randctx *ctx;
 }
 
 /* if (flag==TRUE), then use the contents of randrsl[] to initialize mm[]. */
-void randinit(ctx, flag)
-randctx *ctx;
-word     flag;
+/* ANSI-C style definition (was K&R style before). Note: flag uses `int` to match rand.h */
+void randinit(randctx *ctx, int flag)
 {
    word i;
    ub4 a,b,c,d,e,f,g,h;
    ub4 *m,*r;
    ctx->randa = ctx->randb = ctx->randc = 0;
-   m=ctx->randmem;
-   r=ctx->randrsl;
-   a=b=c=d=e=f=g=h=0x9e3779b9;  /* the golden ratio */
+   m = ctx->randmem;
+   r = ctx->randrsl;
+   a = b = c = d = e = f = g = h = 0x9e3779b9;  /* the golden ratio */
 
-   for (i=0; i<4; ++i)          /* scramble it */
+   for (i = 0; i < 4; ++i)          /* scramble it */
    {
      mix(a,b,c,d,e,f,g,h);
    }
 
-   if (flag) 
+   if (flag)
    {
      /* initialize using the contents of r[] as the seed */
-     for (i=0; i<RANDSIZ; i+=8)
+     for (i = 0; i < RANDSIZ; i += 8)
      {
-       a+=r[i  ]; b+=r[i+1]; c+=r[i+2]; d+=r[i+3];
-       e+=r[i+4]; f+=r[i+5]; g+=r[i+6]; h+=r[i+7];
+       a += r[i  ]; b += r[i+1]; c += r[i+2]; d += r[i+3];
+       e += r[i+4]; f += r[i+5]; g += r[i+6]; h += r[i+7];
        mix(a,b,c,d,e,f,g,h);
-       m[i  ]=a; m[i+1]=b; m[i+2]=c; m[i+3]=d;
-       m[i+4]=e; m[i+5]=f; m[i+6]=g; m[i+7]=h;
+       m[i  ] = a; m[i+1] = b; m[i+2] = c; m[i+3] = d;
+       m[i+4] = e; m[i+5] = f; m[i+6] = g; m[i+7] = h;
      }
      /* do a second pass to make all of the seed affect all of m */
-     for (i=0; i<RANDSIZ; i+=8)
+     for (i = 0; i < RANDSIZ; i += 8)
      {
-       a+=m[i  ]; b+=m[i+1]; c+=m[i+2]; d+=m[i+3];
-       e+=m[i+4]; f+=m[i+5]; g+=m[i+6]; h+=m[i+7];
+       a += m[i  ]; b += m[i+1]; c += m[i+2]; d += m[i+3];
+       e += m[i+4]; f += m[i+5]; g += m[i+6]; h += m[i+7];
        mix(a,b,c,d,e,f,g,h);
-       m[i  ]=a; m[i+1]=b; m[i+2]=c; m[i+3]=d;
-       m[i+4]=e; m[i+5]=f; m[i+6]=g; m[i+7]=h;
+       m[i  ] = a; m[i+1] = b; m[i+2] = c; m[i+3] = d;
+       m[i+4] = e; m[i+5] = f; m[i+6] = g; m[i+7] = h;
      }
    }
    else
    {
      /* fill in m[] with messy stuff */
-     for (i=0; i<RANDSIZ; i+=8)
+     for (i = 0; i < RANDSIZ; i += 8)
      {
        mix(a,b,c,d,e,f,g,h);
-       m[i  ]=a; m[i+1]=b; m[i+2]=c; m[i+3]=d;
-       m[i+4]=e; m[i+5]=f; m[i+6]=g; m[i+7]=h;
+       m[i  ] = a; m[i+1] = b; m[i+2] = c; m[i+3] = d;
+       m[i+4] = e; m[i+5] = f; m[i+6] = g; m[i+7] = h;
      }
    }
 
    isaac(ctx);            /* fill in the first set of results */
-   ctx->randcnt=RANDSIZ;  /* prepare to use the first set of results */
+   ctx->randcnt = RANDSIZ;  /* prepare to use the first set of results */
 }
 
 
@@ -121,16 +120,16 @@ int main()
 {
   ub4 i,j;
   randctx ctx;
-  ctx.randa=ctx.randb=ctx.randc=(ub4)0;
-  for (i=0; i<256; ++i) ctx.randrsl[i]=(ub4)0;
+  ctx.randa = ctx.randb = ctx.randc = (ub4)0;
+  for (i = 0; i < 256; ++i) ctx.randrsl[i] = (ub4)0;
   randinit(&ctx, TRUE);
-  for (i=0; i<2; ++i)
+  for (i = 0; i < 2; ++i)
   {
     isaac(&ctx);
-    for (j=0; j<256; ++j)
+    for (j = 0; j < 256; ++j)
     {
       printf("%.8lx",ctx.randrsl[j]);
-      if ((j&7)==7) printf("\n");
+      if ((j&7) == 7) printf("\n");
     }
   }
 }

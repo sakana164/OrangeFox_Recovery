@@ -1285,5 +1285,17 @@
 		<string name="enable_hw_control_2">和電源鍵操作介面。</string>
 		<string name="enable_hw_control_3">手勢將被禁用。</string>
 		<string name="enable_hw_control_4">繼續執行？</string>
+
+		<!-- WLAN -->
+		<string name="wlan_menu">WiFi</string>
+		<string name="wlan_scan">掃描網路</string>
+		<string name="wlan_scanning">掃描網路中...</string>
+		<string name="wlan_connect">連線網路</string>
+		<string name="wlan_status">取得網路資訊</string>
+		<string name="wlan_test">測試連網狀態</string>
+		<string name="wlan_list">WiFi清單</string>
+		<string name="wlan_select">選擇欲連線的WiFi</string>
+		<string name="wlan_encryption">WiFi 加密方式：</string>
+		<string name="wlan_empty">掃描失敗或清單為空，請重新掃描！</string>
 	</resources>
 </language>
